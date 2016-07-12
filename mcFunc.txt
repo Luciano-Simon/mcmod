@@ -1,0 +1,410 @@
+函数全集（完整）
+一.钩子(hook)函数
+当执行了特定动作时，这些函数会运行并执行其他函数
+1.function useItem(x,y,z,itemId,blockId,side,itemDamage,blockDamage){}
+当进行一次点击时(如使用物品或放置方块，食用食物不包括在内)会触发这个函数，并返回数据。
+x:被点击方块的x坐标
+y:被点击方块的y坐标
+z:被点击方块的z坐标
+itemId:点击时手里拿的物品id(空手为0)
+blockId:被点击方块的id
+side:方块被从哪个方向点击
+itemDamage:点击时手里拿的物品附加值(伤害值)
+blockDamage:被点击方块的附加值(伤害值)
+2.function attackHook(attacker,victim){}
+当点击或攻击了一个生物mob(动物，怪物，玩家(待确认))时会触发这个函数，并返回数据。
+attacker:进行了点击或攻击动作的mob
+victim:被点击或攻击的mob
+3.function modTick(){}
+每刻(1/20s 0.05s)执行一次
+4.function procCmd(cmd){}
+在聊天里输入以"/"开头的话文字并执行(回车)时会触发
+cmd:在聊天里输入的以"/"开头的文字(不包含"/")
+5.function newLevel(){}
+当世界被载入时(出现"Building terrain"时)会触发
+6.function leaveGame(){}
+当离开当前世界(返回主菜单)时会触发
+7.function entityAddedHook(entity){}
+当一个新的实体被添加(包括箭，下落的方块，点燃的TNT等)时会触发
+entity:被添加的自然实体
+8.function entityRemovedHook(entity){}
+当一个实体(包括箭，下落的方块，点燃的TNT等)消失或死亡时会触发
+entity:被移除的实体
+9.function deathHook(murderer, victim){}
+当一个生物mod死亡时会触发
+murderer:造成死亡的实体
+victim:死亡的实体
+10.function levelEventHook(entity,eventType,x,y,z,data){}
+当门(木门,栅栏门,陷阱门)被打开或关闭时会触发
+当羊吃掉草时触发
+睡觉时触发
+entity:动作的实体(观测数据。总是为0)
+eventType:事件类型(观测数据。开关门数据为1003，羊吃草的数据为2001,睡觉的数据为9800)
+x,y,z:被点击的门方块的坐标，被吃掉的草方块的坐标，睡觉时为(0,0,0)
+data:未知(观测数据。开关门，睡觉的数据为0，羊吃草的数据为2)
+11.function blockEventHook(x,y,z,eventType,data){}
+每三秒检查所有箱子的开关状态
+x,y,z:箱子的坐标
+eventType:事件类型(观测数据为1)
+data:未知(观测数据。关闭为0，打开为1，打开过程中为2(待确认)。检查大箱子时第二个被放置的箱子数值改变，另一个一直为0)
+12.function destroyBlock(x,y,z,side){}
+当一个方块被破坏时会触发
+x,y,z:方块的坐标
+side:方块被从哪个方向破坏
+二.文字显示函数
+也就是在游戏中现实文字的函数，也比较常用。
+1.print(text);
+将数据显示在浮动窗口里
+text可以是非实体变量或被"括起来的字符串
+如print("text");
+2.clientMessage(text);
+将数据显示在聊天框里
+text可以是非实体变量或被"括起来的字符串
+如clientMessage("text");
+颜色 clientMessage(ChatColor.颜色+text);
+例子:clientMessage(ChatColor.YELLOW + "It's the " + ChatColor.RED + "Red " + ChatColor.GREEN + "Green " + ChatColor.YELLOW + "show!");
+颜色表:BLACK,DARK_BLUE,DARK_GREEN,DARK_AQUA,DARK_RED,DARK_PURPLE,GOLD,GRAY,DARK_GRAY,BLUE,GREEN,AQUA,RED,LIGHT_PURPLE,YELLOW,WHITE
+三.获取坐标函数
+即在游戏中获取一个坐标，并使用。
+1.getPlayerX();getPlayerY();getPlayerZ();
+获取玩家的x,y,z坐标
+2.getPlayerEnt();
+获取玩家的实体
+3.getYaw(ent);
+获取实体ent的头部所朝向(左右)的角度值
+ent为空时默认为玩家
+面向z轴正方向是时为0±360n，面向x轴负方向时为90±360n
+4.getPitch(ent);
+获取实体ent的头部所朝向(上下)的角度值
+ent为空时默认为玩家
+面向y轴正方向时为-90，面向y轴负方向时为90
+5.getCarriedItem();
+获取玩家手里正在拿着的物品或方块的id
+6.getTile(x,y,z);
+获取坐标为(x,y,z)的方块的id
+四.实体设置函数
+对某个实体设置某种事件，并将其触发。
+1.setPosition(ent,x,y,z);
+将一个实体ent的坐标设置为(x,y,z)
+ent:目标实体
+x,y,z:目标坐标
+2.setPositionRelative(ent,x,y,z);
+设置指定实体对于玩家的相对位置
+ent:目标实体
+x,y,z:相对坐标
+3.setRot(ent,yaw,pitch);
+将一个实体的头部方向设为(yaw,pitch)
+ent:目标实体
+yaw:水平角度
+pitch:垂直角度
+4.setVelX(ent,velocity);setVelY(ent,velocity);setVelZ(ent,velocity);
+将一个实体ent的x/y/z轴速度设为velocity
+ent:目标实体
+velocity:速度
+5.setTile(x,y,z,blockID,damageValue);
+将特定的方块放置
+x,y,z:放置的坐标
+blockId:放置方块的id
+damageValue:放置方块的附加值(伤害值)
+6.setPlayerHealth(halfHearts);
+设置玩家的血量
+helfHearts:半心量，20时为满血，但可以更高(<=255)
+7.setNightMode(boolean);
+夜晚模式。此函数尚未被证实能正常使用，但存在于源码中
+boolean:布朗值，只能为true或false
+五.实体生成(spawn)函数
+如题，我不多说。
+1.spawnCow(x,y,z,"image");spawnChicken(x,y,z,"image");
+在特定位置生成一只牛/鸡，并将贴图换成image
+x,y,z:生成mod的坐标
+image:在assets文件夹下的图片路径
+2.spawnPigZombie(x,y,z,heldItemID,"image");
+在特定位置生成一只僵尸猪人，并将贴图换成image
+x,y,z:生成mod的坐标
+heldItemID:猪人手里拿的物品id
+image:在assets文件夹下的图片路径
+六.杂项函数
+一些五花八门的杂项函数。
+1.explode(x,y,z,radius);
+在坐标为(x,y,z)处引发一场半径为radius的爆炸
+2.rideAnimal(player,target);
+让player骑在target身上
+player,target为实体
+3.addItemInventory(ID,amount,damageValue);
+在背包里添加amount个id为ID，附加值(伤害值)为damageValue的物品
+amount可以为负
+4.preventDefault();
+阻止原有动作
+七.启动器(BlockLauncher-only)函数
+这些函数只能在BlockLauncher启动器里使用
+1.bl_spawnMob(x,y,z,mobID,"image");(停用，请使用Level.spawnMob)
+在特定位置生成一个实体，并替换贴图
+x,y,z:指定位置
+mobID:实体类别id
+image:在assets文件夹下的图片路径
+2.bl_setMobSkin(mob,"image");
+将指定实体的贴图更换
+mob:指定的实体(不是实体类别)
+image:在assets文件夹下的图片路径
+八.Level函数
+Level.explode(x,y,z,radius);
+在坐标为(x,y,z)处引发一场半径为radius的爆炸
+与explode(x,y,z,radius)相同
+Level.getTile(x,y,z);
+获取坐标为(x,y,z)的方块的id
+和getTile(x,y,z);相同
+Level.setTile(x,y,z,blockID);
+放置方块
+和setTile(x,y,z,blockID);相同
+Level.getData(x,y,z);
+获取坐标为(x,y,z)的方块的伤害值(附加值)
+Level.getWorldDir();
+返回当前世界所在的文件夹的名字
+Level.getWorldName();
+返回当前世界的名字
+Level.spawnChicken(x,y,z,"image");Level.spawnCow(x,y,z,"image");
+在特定位置生成一只牛/鸡，并将贴图换成image
+x,y,z:生成mod的坐标
+image:在assets文件夹下的图片路径
+和spawnCow(x,y,z,"image");spawnChicken(x,y,z,"image");相同
+Level.destroyBlock(x,y,z,shouldDropItem);
+破坏一个方块，拥有正常破坏时的所有特效
+x,y,z:方块坐标
+shouldDropItem:是否掉落被破坏的方块本身。布尔值，只能为true/false
+Level.dropItem(x,y,z,range,id,count,damage);
+从指定坐标掉落方块
+x,y,z:指定坐标
+range;掉落的距离
+id:掉落物id
+count:掉落物数量
+damage:掉落物伤害值
+Level.getAddress();
+用途不明。。
+返回值是实体。。
+Level.getChestSlot(x,y,z,slot);
+读取指定箱子指定位置的物品id
+x,y,z:箱子坐标
+slot:物品位置
+Level.getChestSlotCount(x,y,z,slot);
+读取指定箱子指定位置的物品数量
+x,y,z:箱子坐标
+slot:物品位置
+Level.getChestSlotData(x,y,z,slot);
+读取指定箱子指定位置的物品伤害值(附加值)
+x,y,z:箱子坐标
+slot:物品位置
+Level.setChestSlot(x,y,z,slot,id,damage,amount);
+向箱子指定位置放置物品
+x,y,z:箱子坐标
+slot:物品位置
+id,damage,amount:物品id，伤害值，数量
+Level.getGameMode();
+获取游戏模式。生存为0，创造为1。
+Level.setGameMode(mode);
+设置游戏模式。生存为0，创造为1。
+Level.getTime();
+获取当前时间。0为正午，7200为日落，8280为晚上，13320为日出。
+Level.setTime(time);
+设置时间。0为正午，7200为日落，8280为晚上，13320为日出。
+Level.getSignText(x,y,z,line);
+获取指定牌子的内容，为空时返回null
+x,y,z:牌子的坐标
+line:获取的行数，第一行为0
+Level.setSignText(x,y,z,line,"text");
+设置指定牌子的内容
+x,y,z:牌子的坐标
+line:设置的行数，第一行为0
+text:内容。必须是字符串
+Level.playSound(x,y,z,sound,volume,pitch);
+播放声音
+x,y,z:指定坐标
+sound:MCPE中的声音
+volume:音量
+pitch:角度，用途不明
+Level.playSoundEnt(ent,sound,volume,pitch);
+ent:自然实体
+sound:MCPE中的声音
+volume:音量
+pitch:角度，用途不明
+Level.setNightMode(boolean);
+夜晚模式。此函数尚未被证实能正常使用，但存在于源码中
+boolean:布朗值，只能为true或false
+与setNightMode(boolean)相同
+Level.setSpawn(x,y,z);
+设置复活点
+Level.setTile(x,y,z,blockID);
+将特定的方块放置
+x,y,z:放置的坐标
+blockId:放置方块的id
+和setTile(x,y,z,blockID)相同
+ 九.Player函数
+ Player.addItemInventory(ID,amount,damage);
+ 在背包里添加amount个id为ID，附加值(伤害值)为damageValue的物品
+ amount可以为负
+ 和addItemInventory(ID,amount,damage)相同
+ Player.clearInventorySlot(slot);
+ 清除背包里指定位置的物品
+ slot:物品在背包的位置
+ Player.getInventorySlot(slot);
+ 获取背包里指定位置的物品id
+ slot:物品在背包的位置
+ Player.getInventorySlotCount(slot);
+ 获取背包里指定位置的物品数量
+ slot:物品在背包的位置
+ Player.getInventorySlotData(slot);
+ 获取背包里指定位置的物品伤害值(附加值)
+ slot:物品在背包的位置
+ Player.getSelectedSlotId();
+ 获取被选中的物品栏的id(slot)
+ Player.getArmorSlot(slot);
+ 获取身上的指定装备id
+ slot:装备位置
+ Player.getArmorSlotDamage(slot);
+ 获取身上指定装备的伤害值(耐久)
+ slot:装备位置
+ Player.setArmorSlot(slot,id,damage);
+ 设置身上的装备
+ slot:装备的位置
+ id:装备id
+ damage:装备伤害值(附加值)
+ Player.getCarriedItem();
+ 获取玩家手里正在拿着的物品或方块的id
+ 和getCarriedItem()相同
+ Player.getCarriedItemCount();
+ 获取玩家手里正在拿着的物品或方块的数量
+ Player.getCarriedItemData();
+ 获取玩家手里正在拿着的物品或方块的伤害值(附加值)
+ Player.getEntity();
+ 获取玩家的实体
+ 和getPlayerEnt()相同
+ Player.getX();Player.getY();Player.getZ();
+ 获取玩家的x,y,z坐标
+ 和getPlayerX();getPlayerY();getPlayerZ();相同
+ Player.setHealth(health);
+ 设置玩家生命
+ health:半心量，20时为满血，但可以更高(<=255)
+ 和setPlayerHealth(halfHearts)相同
+ 十.Entity函数
+ Entity.setFireTicks(ent,time);
+ 使实体燃烧
+ ent:自然实体
+ time:燃烧时间，单位为秒
+ Entity.getAnimalAge(ent);
+ 获取动物年龄
+ ent:动物实体
+ 取值为-24000到0，玩家一直为0
+ Entity.setAnimalAge(ent,age);
+ 设置动物年龄
+ ent:动物实体
+ age:动物年龄(-24000(幼年)到0(成年))
+ 对敌对生物和玩家无效
+ Entity.getEntityTypeId(ent);
+ 返回实体种类id
+ Entity.getYaw(ent);
+ 获取实体ent的头部所朝向(左右)的角度值
+ ent为空时默认为玩家
+ 面向z轴正方向是时为0±360n，面向x轴负方向时为90±360n
+ 和getYaw(ent)相同
+ Entity.getPitch(ent);
+ 获取实体ent的头部所朝向(上下)的角度值
+ ent为空时默认为玩家
+ 面向y轴正方向时为-90，面向y轴负方向时为90
+ 和getPitch(ent)相同
+ Entity.setRot(ent,yaw,pitch);
+ 将一个实体的头部方向设为(yaw,pitch)
+ ent:目标实体
+ yaw:水平角度
+ pitch:垂直角度
+ 与setRot(ent,yaw,pitch);相同
+ Entity.remove(ent);
+ 移除实体。如果玩家实体被移除，玩家将不可见且不可移动
+ ent:自然实体
+ Entity.rideAnimal(player,target);
+ 让player骑在target身上
+ player,target为实体
+ 和rideAnimal(player,target)相同
+ Entity.getHealth(ent);
+ 获取实体生命
+ ent:生物实体
+ Entity.setHealth(ent,health);
+ 设置实体生命
+ ent:生物实体
+ health:半心量，20时为满血，但可以更高(<=255)
+ Entity.setCarriedItem(ent,ID,int,DamageValue);
+ ent:实体。只能是玩家，僵尸猪人，小白(skeletons)
+ ID:物品id
+ int:未知值。数字
+ DamageValue:物品伤害值(附加值)
+ Entity.setSneaking(ent,boolean);
+ Entity.getX(ent);Entity.getY(ent);Entity.getZ(ent);
+ 获取实体坐标
+ ent:自然实体
+ Entity.setPosition(ent,x,y,z);
+ 将一个实体ent的坐标设置为(x,y,z)
+ ent:目标实体
+ x,y,z:目标坐标
+ 和setPosition(ent,x,y,z);相同
+ Entity.setPositionRelative(ent,x,y,z);
+ 设置指定实体对于玩家的相对位置
+ ent:目标实体
+ x,y,z:相对坐标
+ 和setPositionRelative(ent,x,y,z);相同
+ Entity.setVelX(ent,vel);Entity.setVelY(ent,vel);Entity.setVelZ(ent,vel);
+ 将一个实体ent的x/y/z轴速度设为vel
+ ent:目标实体
+ vel:速度
+ 与setVelX(ent,vel);setVelY(ent,vel);setVelZ(ent,vel);相同
+ Entity.spawnMob(x,y,z,mobID,"image");(停用，请使用Level.spawnMob)
+ 在特定位置生成一个实体，并替换贴图
+ x,y,z:指定位置
+ mobID:实体类别id
+ image:在assets文件夹下的图片路径
+ 与bl_spawnMob(x,y,z,mobID,"image");相同
+ Entity.setMobSkin(mob,"image");
+ 将指定实体的贴图更换
+ mob:指定的实体(不是实体类别)
+ image:在assets文件夹下的图片路径
+ 与bl_setMobSkin(mob,"image");相同
+ Entity.setRenderType(ent,type);
+ 用不同的模型来伪装实体
+ ent:自然实体
+ type:模型种类(0.no idea 1.no override 2.点燃的TNT 3.玩家 4.掉落的物品 5.??? 6.鸡 7.牛 8.猪 9.羊 10.??? 11.僵尸 12.小白(骷髅) 13.蜘蛛 14.苦力怕(jj怪)(替换困难，有概率失败) 15.射出的箭 16.玩家(因为没有名字标签,游戏会崩溃) 17.扔出的鸡蛋 18.扔出的雪球 19.挂画(游戏崩溃) 20.正在掉下落的方块)
+ 实体id:
+ 10:鸡
+ 11:牛
+ 12:猪
+ 13:羊
+ 32:僵尸
+ 33:苦力怕(jj怪)
+ 34:骷髅(小白)
+ 35:蜘蛛
+ 36:僵尸猪人
+ 64:掉落的物品
+ 65:点燃的TNT
+ 66:下落的方块
+ 十一.1.5.5启动器及以上可用材质函数。
+ Block.defineBlock(blockId,name,[textures/*六面材质*/],0/*材料源id*/,true/*透明*/, int renderType/*未知*/)
+ Block.setShape(blockId,x1,y1,z1,x2,y2,z2)//形状
+ Block.setDestroyTime(id,time);
+ Block.setExplosionResistance(id,res)//爆炸阻力,未实现
+ Block.setLightLevel(id,level);
+ Block.setColor(id,[color/*数组*/]);
+ Block.setStepSound(blockId,sourceId);//未实现
+ Block.defineBlock(blockId,name,[1,2,3,4,5,6/*六面材质,右上角为0*/],0/*材料源id*/,true/*透明*/, renderType)
+ renderType
+ 0 标准
+ 1 花
+ 2 火把
+ 3 火
+ 4 流体
+ 6 作物
+ 7 门
+ 8 台阶
+ 10 楼梯
+ 11 栅栏
+ 13 仙人掌
+ 14 床
+ 18 玻璃板
+ 19 植物的茎
+ 21 栅栏门
+
